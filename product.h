@@ -1,10 +1,13 @@
 #ifndef PRODUCT_H
 #define PRODUCT_H
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 #include <string>
 #include <set>
 #include <vector>
 #include <algorithm>
+#include "util.h"
 
 class Product {
 public:
