@@ -49,4 +49,7 @@ protected:
     std::string category_;
 
 };
+void displayProducts(std::set<Product *> &hits);
+
+void displayAllProducts(std::vector<Product *> &hits);
 #endif

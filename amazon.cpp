@@ -33,8 +33,6 @@ int main(int argc, char *argv[]) {
      ****************/
     MyDataStore ds;
 
-
-
     // Instantiate the individual section and product parsers we want
     ProductSectionParser *productSectionParser = new ProductSectionParser;
     productSectionParser->addProductParser(new ProductBookParser);
@@ -102,17 +100,28 @@ int main(int argc, char *argv[]) {
                 /* Add support for other commands here */
             else if (cmd == "ADD") {
                 string userName;
-                int search_hit_number;
+                size_t search_hit_number;
                 ss >> userName;
+                userName = convToLower(userName);
                 ss >> search_hit_number;
-                ds.addProductToCart(userName, hits[search_hit_number]);
+                if(!ds.findUser(userName)) {
+                    cout << "Invalid request" << endl;
+                }
+                if(search_hit_number > hits.size() || search_hit_number < 1){
+                    cout << "Invalid request" << endl;
+                    continue;
+                }
+                ds.addProductToCart(userName, hits[search_hit_number - 1]);
             } else if (cmd == "VIEWCART") {
                 string userName;
                 ss >> userName;
-
+                userName = convToLower(userName);
+                ds.viewCart(userName);
             } else if (cmd == "BUYCART") {
                 string userName;
                 ss >> userName;
+                userName = convToLower(userName);
+                ds.buyCart(userName);
             } else {
                 cout << "Unknown command" << endl;
             }

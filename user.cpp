@@ -64,11 +64,15 @@ void User::viewCart() {
 }
 
 void User::buyCart() {
+    std::vector<Product*> productsToKeep;
     for(Product* product : cart_){
         if(product->getQty() > 0 && product->getPrice() <= balance_){
             product->subtractQty(1);
             balance_ -= product->getPrice();
-            cart_.erase(cart_.begin());
+        }else{
+            cout << "Cannot purchase: " << product->getName() << endl;
+            productsToKeep.push_back(product);
         }
     }
+    cart_ = productsToKeep;
 }

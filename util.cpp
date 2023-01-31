@@ -3,7 +3,6 @@
 #include <cctype>
 #include <algorithm>
 #include "util.h"
-
 using namespace std;
 
 std::string convToLower(std::string src) {
@@ -17,6 +16,7 @@ std::set <std::string> parseStringToWords(string rawWords) {
     // cb if there are multiple spaces between words or weird punctuation
     set<string> parsedWords;
     trim(rawWords);
+    rawWords += " ";
     rawWords = convToLower(rawWords);
     string currWord = "";
     for(size_t i = 0; i < rawWords.length(); i++){
@@ -26,6 +26,7 @@ std::set <std::string> parseStringToWords(string rawWords) {
                 parsedWords.insert(currWord);
                 currWord = "";
             }
+            currWord = "";
         }else{
             currWord += currElement;
         }

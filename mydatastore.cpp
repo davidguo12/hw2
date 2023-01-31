@@ -11,6 +11,16 @@ MyDataStore::MyDataStore() {
 
 }
 
+MyDataStore::~MyDataStore() {
+    for(Product* product: allProducts){
+        delete product;
+    }
+    std::map<std::string, User*>::iterator userItr;
+    for(userItr = usernameToUserMap.begin(); userItr != usernameToUserMap.end(); userItr++){
+        delete userItr->second;
+    }
+}
+
 void MyDataStore::addProduct(Product *p){
     allProducts.push_back(p);
 
@@ -32,7 +42,8 @@ void MyDataStore::addProduct(Product *p){
 }
 
 void MyDataStore::addUser(User *u) {
-    usernameToUserMap.insert({u->getName(), u});
+    std::string name = convToLower(u->getName());
+    usernameToUserMap.insert({name, u});
 }
 
 std::vector<Product *> MyDataStore::search(std::vector<std::string> &terms, int type) {
@@ -43,11 +54,14 @@ std::vector<Product *> MyDataStore::search(std::vector<std::string> &terms, int 
 
     std::set<Product*> testRelevantProducts;
     std::map<std::string, std::set<Product*>>::iterator mapItr;
+//    cout << terms.size() << endl;
     for(string term : terms){
+//        cout << term << endl;
         mapItr = keywordToProductMap.find(term);
         if(mapItr == keywordToProductMap.end()){
             continue;
         }
+//        displayProducts(mapItr->second);
         if(testRelevantProducts.empty()){
             testRelevantProducts = mapItr->second;
             continue;
@@ -63,11 +77,46 @@ std::vector<Product *> MyDataStore::search(std::vector<std::string> &terms, int 
     return relevantProducts;
 }
 
+User* MyDataStore::findUser(std::string userName){
+    std::map<std::string, User*>::iterator it;
+    it = usernameToUserMap.find(userName);
+    if(it == usernameToUserMap.end()){
+        return nullptr;
+    }
+    return it->second;
+}
+
 void MyDataStore::addProductToCart(std::string userName, Product *product) {
     std::map<std::string, User*>::iterator it;
     it = usernameToUserMap.find(userName);
+    if(it == usernameToUserMap.end()){
+        cout << "Invalid username" << endl;
+        return;
+    }
     it->second->addToCart(product);
 }
+
+void MyDataStore::viewCart(std::string userName){
+    std::map<std::string, User*>::iterator it;
+    it = usernameToUserMap.find(userName);
+    if(it == usernameToUserMap.end()){
+        cout << "Invalid username" << endl;
+        return;
+    }
+    it->second->viewCart();
+}
+
+void MyDataStore::buyCart(std::string userName){
+    std::map<std::string, User*>::iterator it;
+    it = usernameToUserMap.find(userName);
+    if(it == usernameToUserMap.end()){
+        cout << "Invalid username" << endl;
+        return;
+    }
+    it->second->buyCart();
+}
+
+
 
 
 void MyDataStore::dump(std::ostream &ofile) {
@@ -75,7 +124,7 @@ void MyDataStore::dump(std::ostream &ofile) {
     for(Product* product: allProducts){
         product->dump(ofile);
     }
-    ofile << "</products" << endl;
+    ofile << "</products>" << endl;
     ofile << "<users>" << endl;
     map<string, User*>::iterator it;
     for(it = usernameToUserMap.begin(); it != usernameToUserMap.end(); it++){

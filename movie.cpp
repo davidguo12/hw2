@@ -31,7 +31,7 @@ std::set<std::string> Movie::keywords() const{
     std::string rawKeywords = "";
     rawKeywords = getName();
     allKeywords = parseStringToWords(rawKeywords);
-    allKeywords.insert(getGenre());
+    allKeywords.insert(convToLower(getGenre()));
     return allKeywords;
 }
 

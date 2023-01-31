@@ -54,4 +54,23 @@ void Product::dump(std::ostream& os) const
 }
 
 
+void displayProducts(set<Product*>& hits)
+{
+    vector<Product*> products(hits.begin(), hits.end());
+    displayAllProducts(products);
+}
 
+void displayAllProducts(vector<Product*>& hits)
+{
+    int resultNo = 1;
+    if (hits.begin() == hits.end()) {
+        cout << "No results found!123" << endl;
+        return;
+    }
+    for(vector<Product*>::iterator it = hits.begin(); it != hits.end(); ++it) {
+        cout << "Hit " << setw(3) << resultNo << endl;
+        cout << (*it)->displayString() << endl;
+        cout << endl;
+        resultNo++;
+    }
+}

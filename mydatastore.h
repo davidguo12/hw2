@@ -9,6 +9,8 @@ class MyDataStore : public DataStore {
 public:
     MyDataStore();
 
+    ~MyDataStore();
+
     void addProduct(Product *p);
 
     void addUser(User *u);
@@ -18,6 +20,12 @@ public:
     void dump(std::ostream &ofile);
 
     void addProductToCart(std::string userName, Product* product);
+
+    void viewCart(std::string userName);
+
+    void buyCart(std::string userName);
+
+    User* findUser(std::string userName);
 
 protected:
     std::vector<Product *> allProducts;

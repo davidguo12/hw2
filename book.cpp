@@ -28,7 +28,7 @@ std::set<std::string> Book::keywords() const {
     std::string rawKeywords = "";
     rawKeywords = getName() + " " + getAuthor();
     allKeywords = parseStringToWords(rawKeywords);
-    allKeywords.insert(getISBN());
+    allKeywords.insert(convToLower(getISBN()));
     return allKeywords;
 }
 
